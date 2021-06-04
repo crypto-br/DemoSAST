@@ -1,0 +1,23 @@
+name: demoSAST
+on:
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Rodando o Build
+      run: echo Build deu bom !
+      
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    needs: build
+    steps:
+    - name: Rodande Dev
+      run: echo Dev deu bom !
+      
+      
+  
+    
