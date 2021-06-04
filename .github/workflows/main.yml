@@ -31,7 +31,22 @@ jobs:
             cd demoSAST
             curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/master/deployments/scripts/install.sh | bash
             horusec start -p"./"
+           
+  deploy-hml:
+    runs-on: ubuntu-latest
+    environment:
+      name: hml
+    needs: [deploy-dev, deploy-sast]
+    steps:
+    - name: Rodando HML
+      run: echo Deploy HML deu bom !
       
-      
-  
+  deploy-prd:
+    runs-on: ubuntu-latest
+    environment:
+      name: prd
+    needs: deploy-hml
+    steps:
+    - name: Rodando PRD
+      run: echo Deploy PRD deu bom !
     
