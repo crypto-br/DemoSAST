@@ -31,7 +31,18 @@ jobs:
             cd demoSAST
             curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/master/deployments/scripts/install.sh | bash
             horusec start -p"./" -e="true"
-           
+  
+  deploy-owasp:
+    runs-on: ubuntu-latest
+    environment:
+      name: owasp
+    needs: [deploy-dev, deploy-sast]
+    steps:
+    - name: ZAP scan
+      uses: zaproxy/action-baseline@v0.4.0
+      with:
+        target: 'https://www.zaproxy.org'
+      
   deploy-hml:
     runs-on: ubuntu-latest
     environment:
