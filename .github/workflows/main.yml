@@ -3,8 +3,20 @@ on:
   workflow_dispatch:
   
 jobs:
+
+  deploy-trivy:
+    runs-on: ubuntu-latest
+    environment:
+      name: trivy
+    steps:
+    - name: Rodando Trivy no repositório
+      run: |
+            wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
+            sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+            trivy repo https://github.com/crypto-br/demoSAST
   build:
     runs-on: ubuntu-latest
+    needs: deploy-trivy
     steps:
     - name: Rodando o Build
       run: echo Build deu bom !
@@ -38,23 +50,13 @@ jobs:
       name: owasp
     needs: [deploy-dev, deploy-sast]
     steps:
-    - name: ZAP scan
-      uses: zaproxy/action-baseline@v0.4.0
-      with:
-        target: 'https://www.zaproxy.org'
-        
-  deploy-trivy:
-    runs-on: ubuntu-latest
-    environment:
-      name: trivy
-    needs: deploy-owasp
-    steps:
-    - name: Rodando Trivy no repositório
-      run: |
-            wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
-            sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
-            trivy repo https://github.com/crypto-br/demoSAST.git
-            
+    - name: Rodando OWASP
+      run: echo Deploy OWASP deu bom !
+    #- name: ZAP scan
+    #  uses: zaproxy/action-baseline@v0.4.0
+    #  with:
+    #    target: 'https://www.zaproxy.org'
+                  
   deploy-hml:
     runs-on: ubuntu-latest
     environment:
