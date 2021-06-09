@@ -42,7 +42,19 @@ jobs:
       uses: zaproxy/action-baseline@v0.4.0
       with:
         target: 'https://www.zaproxy.org'
-      
+        
+  deploy-trivy:
+    runs-on: ubuntu-latest
+    environment:
+      name: trivy
+    needs: deploy-owasp
+    steps:
+    - name: Rodando Trivy no repositório
+      run: |
+            wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
+            sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+            trivy repo https://github.com/crypto-br/demoSAST.git
+            
   deploy-hml:
     runs-on: ubuntu-latest
     environment:
